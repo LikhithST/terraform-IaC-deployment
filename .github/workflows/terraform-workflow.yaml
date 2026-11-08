@@ -22,17 +22,24 @@ jobs:
       - name: Locate Environment Directories
         id: set-matrix
         run: |
-          # Finds directories under environments/ containing .tf files and formats as a JSON array
-          ENV_DIRS=$(find environments -mindepth 1 -maxdepth 1 -type d -exec test -e "{}/main.tf" -o -name "*.tf" \; -print | jq -R -s -c 'split("\n")[:-1]')
+          # Find directories directly inside environments/ that contain .tf files
+          ENV_DIRS=$(find environments -mindepth 2 -maxdepth 2 -name "*.tf" -exec dirname {} + | sort -u | jq -R -s -c 'split("\n")[:-1]')
+
+          # Fallback to empty array if no directories found to prevent JSON parser crash
+          if [ -z "$ENV_DIRS" ] || [ "$ENV_DIRS" = "[]" ]; then
+            ENV_DIRS='[]'
+          fi
+
           echo "matrix=${ENV_DIRS}" >> "$GITHUB_OUTPUT"
 
   # Job 2: Run Terraform plan and OPA evaluation for each environment in parallel
   opa-compliance:
     name: "OPA Check (${{ matrix.environment }})"
     needs: find-environments
+    if: ${{ needs.find-environments.outputs.matrix != '[]' && needs.find-environments.outputs.matrix != '' }}
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false # Allows all environments to run even if one fails
+      fail-fast: false
       matrix:
         environment: ${{ fromJson(needs:find-environments.outputs.matrix) }}
 
@@ -65,7 +72,6 @@ jobs:
 
       - name: Run OPA Tag Evaluation
         run: |
-          # Use $GITHUB_WORKSPACE to reference the shared policy file
           VIOLATIONS=$(opa eval --format raw --data "$GITHUB_WORKSPACE/policy/check_tags.rego" --input tfplan.json "data.terraform.tags.deny")
 
           if [ "$VIOLATIONS" != "[]" ] && [ -n "$VIOLATIONS" ]; then
