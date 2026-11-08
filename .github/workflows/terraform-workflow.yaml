@@ -15,6 +15,11 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+    permissions:
+      id-token: write
+      contents: read
+      
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
