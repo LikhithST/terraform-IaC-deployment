@@ -51,6 +51,12 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Configure AWS Credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::203463459109:role/terraform-IaC-role
+          aws-region: us-east-1
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
