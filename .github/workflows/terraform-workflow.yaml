@@ -16,10 +16,6 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
 
-    permissions:
-      id-token: write
-      contents: read
-      
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -47,7 +43,10 @@ jobs:
       fail-fast: false
       matrix:
         environment: ${{ fromJson(needs.find-environments.outputs.matrix) }}
-
+    permissions:
+      id-token: write
+      contents: read
+      
     defaults:
       run:
         working-directory: ${{ matrix.environment }}
