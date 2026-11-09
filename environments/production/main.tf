@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"
+  region                = "us-east-1"
   tag_policy_compliance = "error"
   default_tags {
     tags = {
@@ -13,14 +13,14 @@ locals {
 }
 
 variable "db_pass" {
-  sensitive = true
+  sensitive   = true
   description = "db password"
-  type = string
+  type        = string
 }
 
 module "web-app-module" {
-  source = "../web-app-module"
-  
+  source = "../../web-app-module"
+
   # Input variables
   bucket_prefix    = "web-app-data-${local.environment_name}"
   domain           = "devopsdeployed.com"
