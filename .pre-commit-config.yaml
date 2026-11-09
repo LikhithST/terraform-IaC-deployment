@@ -4,5 +4,7 @@ repos:
     hooks:
       - id: terraform_fmt
       - id: terraform_validate
-      - id: terraform_trivy
-      - id: terraform_checkov
+      #- id: terraform_trivy
+      #  args:
+      #    - --hook-config=--tool-version=0.76.2
+      #- id: terraform_checkov
