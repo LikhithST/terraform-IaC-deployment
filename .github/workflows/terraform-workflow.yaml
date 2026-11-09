@@ -105,7 +105,7 @@ jobs:
           pwd
           cd ..
           pwd
-          VIOLATIONS=$(opa eval --format raw --data "../../policy/check_tags.rego" --input tfplan.json "data.terraform.tags.deny")
+          VIOLATIONS=$(opa eval --format raw --data "../../policy/check_tags.rego" --input $GITHUB_WORKSPACE/tfplan.json "data.terraform.tags.deny")
           if [ "$VIOLATIONS" != "[]" ] && [ -n "$VIOLATIONS" ]; then
             echo "::error::OPA policy violations found in ${{ matrix.environment }}:"
             echo "$VIOLATIONS" | jq -r '.[]'
