@@ -10,8 +10,8 @@ monitored_resources := [
     "aws_security_group"
 ]
 
-# Set of rule violations
-deny[msg] {
+# Set of rule violations (Updated to Rego v1 syntax)
+deny contains msg if {
     # Traverse planned resource changes
     resource := input.resource_changes[_]
 
