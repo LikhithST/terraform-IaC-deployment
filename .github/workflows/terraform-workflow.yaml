@@ -102,7 +102,7 @@ jobs:
 
       - name: Run OPA Tag Evaluation
         run: |
-          VIOLATIONS=$(opa eval --format raw --data "$GITHUB_WORKSPACE/policy/check_tags.rego" --input tfplan.json "data.terraform.tags.deny")
+          VIOLATIONS=$(opa eval --format raw --data "../../policy/check_tags.rego" --input tfplan.json "data.terraform.tags.deny")
 
           if [ "$VIOLATIONS" != "[]" ] && [ -n "$VIOLATIONS" ]; then
             echo "::error::OPA policy violations found in ${{ matrix.environment }}:"
