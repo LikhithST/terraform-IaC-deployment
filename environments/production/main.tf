@@ -26,7 +26,7 @@ module "web-app-module" {
   domain           = "devopsdeployed.com"
   environment_name = local.environment_name
   instance_type    = "t2.micro"
-  create_dns_zone  = false
+  create_dns_zone  = true
   db_name          = "${local.environment_name}mydb"
   db_user          = "foo"
   db_pass          = var.db_pass
