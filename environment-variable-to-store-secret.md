@@ -8,6 +8,8 @@ By pairing GitHub Environments with `TF_VAR_` environment variables, you can use
 2. **Add Environment Secrets:** Inside each environment, add a secret with the same name (for example, `DB_PASSWORD`), holding the respective password for that environment.
 3. **Map to `TF_VAR_` in Your Workflow:** Reference the GitHub Environment in your job, and map the secret to a `TF_VAR_` environment variable.
 
+![secrets used in github actions](./images/repository-secrets.png)
+
 ```yaml
 name: Deploy Infrastructure
 
